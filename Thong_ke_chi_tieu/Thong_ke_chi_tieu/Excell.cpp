@@ -2,13 +2,13 @@
 #include "Excell.h"
 
 
-CExcell::CExcell(void)
+CExcell::CExcell(void): m_hr(NULL), m_pEApp(NULL), m_pBooks(NULL), m_pActiveBook(NULL), m_Sheets(NULL)
 {
-	m_hr = S_OK;
-	m_pEApp = NULL;
-	m_pBooks = NULL;
-	m_pActiveBook = NULL;
-	m_Sheets = NULL;
+	//m_hr = S_OK;
+	//m_pEApp = NULL;
+	//m_pBooks = NULL;
+	//m_pActiveBook = NULL;
+	//m_Sheets = NULL;
 }
 
 
@@ -93,7 +93,7 @@ HRESULT CExcell::Create_File(bool bVisible)
 		var2.pdispVal = pSheet;
 		var2.vt = VT_DISPATCH;
 
-		for(int i = 1; i<11; i++)
+		for(int i = 9; i--;)
 		{
 			m_hr=OLEMethod(DISPATCH_METHOD, NULL, m_Sheets, L"Add", 2, var2, var1);
 		}
@@ -103,9 +103,9 @@ HRESULT CExcell::Create_File(bool bVisible)
 	{
 		LPCTSTR Month[12] = {L"January", L"February", L"March", L"April", L"May", L"June", L"July", L"August", L"September", L"October", L"Novemer", L"December"};
 	
-		for(int i = 1; i<13; i++)
+		for(int i = 12; i--;)
 		{
-			Set_SheetName(i, Month[i-1]);
+			Set_SheetName(i+1, Month[i]);
 		}
 	}
 

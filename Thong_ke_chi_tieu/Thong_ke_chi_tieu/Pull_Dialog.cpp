@@ -88,7 +88,7 @@ void CPull_Dialog::Init_Frame()
 	CBtn_Status.EnableWindow(true);
 	CBtn_View.EnableWindow(true);
 	CCombobox.EnableWindow(true);
-	for(int i = 1; i < 13; i++)
+	for(int i = 12; i --;)
 	{
 		strMonth.Format(_T("%d"), i);
 		CCombobox.AddString(strMonth);

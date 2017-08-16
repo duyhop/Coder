@@ -118,8 +118,8 @@ int CAction::get_number(CString strSource)
 {
 	int result = 0;
 	bool bflag = false;
-
-	for(int i= 0; i< strSource.GetLength(); i++){
+	int length = strSource.GetLength();
+	for(int i= 0; i< length; i++){
 		if (strSource[i] - '0' == -3)
 		{
 			bflag = true;
@@ -248,6 +248,7 @@ void CAction::Pull_action(CString strSheetNo, CString &strSum, CString &strRemai
 	sheetno = get_number(strSheetNo);
 	index = Get_curr_index(sheetno);
 	Get_Data(sheetno, 2, 2, strSum);
+
 	if(!strSum.Compare(L"0"))
 	{
 		Get_Datas(sheetno, index, strSum);
