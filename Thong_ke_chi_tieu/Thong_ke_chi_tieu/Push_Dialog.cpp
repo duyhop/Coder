@@ -27,7 +27,7 @@ void CPush_Dialog::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_MONEY, CEdit_Money);
 	DDX_Control(pDX, IDC_NOTE, CEdit_Note);
 	DDX_Control(pDX, IDC_DATE, CEdit_DateTime);
-	//DDX_Control(pDX, IDC_COMBO2, ComboBox);
+	DDX_Control(pDX, IDC_OWE, CCheckBox);
 }
 
 
@@ -68,7 +68,16 @@ void CPush_Dialog::OnBnClickedPush()
 	}
 
 	CEdit_DateTime.GetWindowTextW(strDate);
-	Action.Push_action(strMoney, strNote, strDate);
+	UINT Cbox_status = CCheckBox.GetState();
+	if(BST_CHECKED == Cbox_status)
+	{
+		Action.Push_owe_action(strMoney, strNote, strDate);
+	}
+	else
+	{
+		Action.Push_action(strMoney, strNote, strDate);
+	}
+	
 
 	// TODO: Add your control notification handler code here
 }

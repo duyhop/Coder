@@ -28,11 +28,11 @@ void CAction::Push_action(CString Money, CString Note, CString Date)
 	}
 	if (current_indx == 0)
 	{
-		current_indx = Get_curr_index(imonth);
+		current_indx = Get_curr_index(imonth, 1);
 	}
 
 	strDay = get_Day(Date);
-	HRESULT hr = Set_Data(imonth, (LPCTSTR)strDay, current_indx, 1);
+	HRESULT hr = Set_Data(imonth, (LPCTSTR)strDay, current_indx, 1, BST_UNCHECKED);
 
 	if(FAILED(hr))
 	{
@@ -40,10 +40,71 @@ void CAction::Push_action(CString Money, CString Note, CString Date)
 		return;
 	}
 	
-	hr = Set_Data(imonth, Money + L"K", current_indx, 2);
+	hr = Set_Data(imonth, Money + L"K", current_indx, 2, BST_UNCHECKED);
 	if(FAILED(hr))
 	{
 		MessageBoxA(NULL, "Push MONEY is Failed!!!", "ERROR", MB_OK|MB_ICONERROR);
+		return;
+	}
+
+	hr = Set_Data(imonth, Note, current_indx, 3, BST_UNCHECKED);
+	if(FAILED(hr))
+	{
+		MessageBoxA(NULL, "Push NOTE is Failed!!!", "ERROR", MB_OK|MB_ICONERROR);
+		return;
+	}
+
+	// Set OWED, PAYED
+	int db_money = get_number(Money);
+	if(db_money > 0)
+	{
+		Set_Current_SUM_Money(imonth, 1, 2, db_money);
+	}
+	else
+	{
+		Set_Current_SUM_Money(imonth, 2, 2, db_money);
+	}
+
+	Save();
+	current_indx++;
+	
+	MessageBoxA(NULL, "Push is completed!!!", "Info", MB_OK|MB_ICONINFORMATION);
+	
+}
+void CAction::Push_owe_action(CString Money, CString Note, CString Date)
+{
+	int imonth = 0;
+	static int current_indx = 0;
+	CString strDay = NULL;
+	
+	imonth = get_Month(Date);
+	{
+		CString strFormat = NULL;
+
+		Get_Data(imonth, 1, 12, strFormat);
+		if (!strFormat.Compare(L"0"))
+		{
+			Create_OWE_Format(imonth);
+		}
+	}
+	if (current_indx == 0)
+	{
+		current_indx = Get_curr_index(imonth, 12);
+	}
+
+	strDay = get_Day(Date);
+	HRESULT hr = Set_Data(imonth, (LPCTSTR)strDay, current_indx, 12, BST_CHECKED);
+
+	if(FAILED(hr))
+	{
+		MessageBoxA(NULL, "Push OWE DAY is Failed!!!", "ERROR", MB_OK|MB_ICONERROR);
+		return;
+	}
+	
+	hr = Set_Data(imonth, Money + L"K", current_indx, 13, BST_CHECKED);
+	if(FAILED(hr))
+	{
+		MessageBoxA(NULL, "Push OWE MONEY is Failed!!!", "ERROR", MB_OK|MB_ICONERROR);
 		return;
 	}
 
@@ -53,67 +114,29 @@ void CAction::Push_action(CString Money, CString Note, CString Date)
 		return;
 	}
 
-	hr = Set_Data(imonth, Note, current_indx, 3);
+	hr = Set_Data(imonth, Note, current_indx, 14, BST_CHECKED);
 	if(FAILED(hr))
 	{
-		MessageBoxA(NULL, "Push NOTE is Failed!!!", "ERROR", MB_OK|MB_ICONERROR);
+		MessageBoxA(NULL, "Push OWE NOTE is Failed!!!", "ERROR", MB_OK|MB_ICONERROR);
 		return;
 	}
-
-	Set_Current_SUM_Money(imonth, 1, 2, Money);
-	Set_Current_SUM_Money(imonth, 2, 2, Money);
-	// Set current money avaiable
-	//{
-		/*CString strCurrent_Money = NULL;
-		double Current_Moneys = 0;
-		Get_Data(imonth, 1, 2, strCurrent_Money);
-		Current_Moneys = get_number(strCurrent_Money);
-		Current_Moneys += get_number(Money);
-		strCurrent_Money.Format(_T("%g"), Current_Moneys);
-
-		hr = Set_Data(imonth, strCurrent_Money + L"K", 1, 2);
-		if(FAILED(hr))
-		{
-			MessageBoxA(NULL, "Push CURRENT MONEY is Failed!!!", "ERROR", MB_OK|MB_ICONERROR);
-			return;
-		}*/
-	//}
-
-	/*{
-		CString strSUM_Money = NULL;
-		double SUM_Moneys = 0;
-		double money = 0;
-
-		Get_Data(imonth, 2, 2, strSUM_Money);
-		SUM_Moneys = get_number(strSUM_Money);
-		money = get_number(Money);
-		if (money < 0)
-		{
-			SUM_Moneys += money;
-			strSUM_Money.Format(_T("%g"), SUM_Moneys);
-
-			hr = Set_Data(imonth, strSUM_Money + L"K", 2, 2);
-			if(FAILED(hr))
-			{
-				MessageBoxA(NULL, "Push SUM MONEY is Failed!!!", "ERROR", MB_OK|MB_ICONERROR);
-				return;
-			}
-			else
-			{
-				MessageBoxA(NULL, "Push SUM MONEY is Success!!!", "OK", MB_OK|MB_ICONINFORMATION);
-			}
-		}
-	}*/
-	//Set_Format(imonth, L"General", 1, 2);
-	//Password_Excel(L"12345");
-	//ProtectExcelSheet(7, L"12345");
+	// Set OWED, PAYED
+	int db_money = get_number(Money);
+	if(db_money > 0)
+	{
+		Set_Current_SUM_Money(imonth, 2, 13, db_money);
+	}
+	else
+	{
+		Set_Current_SUM_Money(imonth, 1, 13, db_money);
+	}
+	
 	Save();
 	current_indx++;
 	
-	MessageBoxA(NULL, "Push is completed!!!", "Info", MB_OK|MB_ICONINFORMATION);
+	MessageBoxA(NULL, "Push OWE  is completed!!!", "Info", MB_OK|MB_ICONINFORMATION);
 	
 }
-
 int CAction::get_number(CString strSource)
 {
 	int result = 0;
@@ -177,54 +200,34 @@ Purpose: Get current line is filled to continue fill
 @author _Robert Bostney_
 @Date 22/06/2017 
 */
-int CAction::Get_curr_index(int imonth)
+int CAction::Get_curr_index(int imonth, int type)
 {
 	CString strMoney = NULL;
 	CString strNote = NULL;
 	CString strDate = NULL;
 
-	for (int i = 3; i < MAX_PATH; i ++)
+	for (int i = 4; i < MAX_PATH; i ++)
 	{
-		Get_Data(imonth, i, 1, strDate);
+		Get_Data(imonth, i, type, strDate);
 		if(!strDate.Compare(L"0"))
-		{
-			return i;
-		}
-
-		Get_Data(imonth, i, 2, strMoney);
-		if(!strMoney.Compare(L"0"))
-		{
-			return i;
-		}
-
-		Get_Data(imonth, i, 3, strNote);
-		if(!strNote.Compare(L"0"))
 		{
 			return i;
 		}
 		
 	}
 }
-HRESULT CAction::Set_Current_SUM_Money(int imonth, int row, int colunm, CString strMoney)
+HRESULT CAction::Set_Current_SUM_Money(int imonth, int row, int colunm, int iMoney)
 {
 	CString strCurrent_Money = NULL;
 	double Current_Money = 0;
-	double db_money = 0;
 
 	Get_Data(imonth, row, colunm, strCurrent_Money);
 	Current_Money = get_number(strCurrent_Money);
-	
-	db_money = get_number(strMoney);
 
-	if (db_money > 0 && row == 2)
-	{
-		return S_OK;
-	}
-
-	Current_Money += db_money;
+	Current_Money += iMoney;
 	strCurrent_Money.Format(_T("%g"), Current_Money);
-		
-	HRESULT hr = Set_Data(imonth, strCurrent_Money + L"K", row, colunm);
+
+	HRESULT hr = Set_Data(imonth, strCurrent_Money + L"K", row, colunm, BST_UNCHECKED);
 	if(FAILED(hr))
 	{
 		MessageBoxA(NULL, "Push CURRENT/SUM is Failed!!!", "ERROR", MB_OK|MB_ICONERROR);
@@ -238,7 +241,6 @@ void CAction::View_action()
 {
 	CString Path_File = NULL;
 	Path_File = Get_PathFile();
-
 	HRESULT hr = Open(Path_File, true);
 }
 
@@ -246,7 +248,7 @@ void CAction::Pull_action(CString strSheetNo, CString &strSum, CString &strRemai
 {
 	int sheetno = 0, index = 0;
 	sheetno = get_number(strSheetNo);
-	index = Get_curr_index(sheetno);
+	index = Get_curr_index(sheetno, 1);
 	Get_Data(sheetno, 2, 2, strSum);
 
 	if(!strSum.Compare(L"0"))

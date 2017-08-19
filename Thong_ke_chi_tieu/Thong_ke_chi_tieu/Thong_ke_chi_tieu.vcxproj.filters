@@ -42,9 +42,6 @@
     <ClInclude Include="Push_Dialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sum_Dialog.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Pull_Dialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -66,9 +63,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Push_Dialog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sum_Dialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Pull_Dialog.cpp">

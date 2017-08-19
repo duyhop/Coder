@@ -18,7 +18,7 @@ private:
 	CEdit CEdit_Money;
 	CEdit CEdit_Note;
 	CEdit CEdit_DateTime;
-
+	CButton CCheckBox;
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 	BOOL OnInitDialog();

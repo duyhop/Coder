@@ -4,18 +4,13 @@
 
 CExcell::CExcell(void): m_hr(NULL), m_pEApp(NULL), m_pBooks(NULL), m_pActiveBook(NULL), m_Sheets(NULL)
 {
-	//m_hr = S_OK;
-	//m_pEApp = NULL;
-	//m_pBooks = NULL;
-	//m_pActiveBook = NULL;
-	//m_Sheets = NULL;
+
 }
 
 
 CExcell::~CExcell(void)
 {
-	//Quit();
-//	CoUninitialize();
+
 }
 
 HRESULT CExcell::Initialize(bool bVisible)
@@ -125,26 +120,42 @@ HRESULT CExcell::Create_File(bool bVisible)
 
 HRESULT CExcell::Create_Format(int nSheetNo)
 {
-	// init number sheets, sheet name, boder, color
-	Set_Data(nSheetNo, L"CURRENT", 1, 1);
-	SetExcelBackgroundColor(nSheetNo, L"A1", 255);
-	Set_Data(nSheetNo, L"SUM", 2, 1);
-	SetExcelBackgroundColor(nSheetNo, L"A2", 255);
+	// init number sheets, sheet name, boder, color for normal mode
+	Set_Data(nSheetNo, L"CURRENT", 1, 1, 0);
+	Set_Data(nSheetNo, L"SUM", 2, 1, 0);
 	SetExcelBackgroundColor(nSheetNo, L"A3:H3", 16776960);
-	Set_Data(nSheetNo, L"DAY", 3, 1);
-	Set_Data(nSheetNo, L"MONEY", 3, 2);
+	Set_Data(nSheetNo, L"DAY", 3, 1, 0);
+	Set_Data(nSheetNo, L"MONEY", 3, 2, 0);
 	MergeExcelCells(nSheetNo, L"C3:H3");
-	Set_Data(nSheetNo, L"NOTE", 3, 3);
+	Set_Data(nSheetNo, L"NOTE", 3, 3, 0);
 	SetExcelBorder(nSheetNo, L"A3", 1);
 	SetExcelBorder(nSheetNo, L"B3", 1);
 	SetExcelBorder(nSheetNo, L"C3:H3", 1);
 	Set_FormatCell(nSheetNo, L"General", 1, 2);
-
+	Set_FormatCell(nSheetNo, L"General", 2, 2);
+	return m_hr;
+}
+HRESULT CExcell::Create_OWE_Format(int nSheetNo)
+{
+	// init number sheets, sheet name, boder, color for OWE mode
+	Set_Data(nSheetNo, L"OWED", 1, 12, 0);
+	Set_Data(nSheetNo, L"PAYED", 2, 12, 0);
+	SetExcelBackgroundColor(nSheetNo, L"L3:S3", 16776960);
+	Set_Data(nSheetNo, L"DAY", 3, 12, 0);
+	Set_Data(nSheetNo, L"MONEY", 3, 13, 0);
+	MergeExcelCells(nSheetNo, L"N3:S3");
+	Set_Data(nSheetNo, L"NOTE", 3, 14, 0);
+	SetExcelBorder(nSheetNo, L"L3", 1);
+	SetExcelBorder(nSheetNo, L"M3", 1);
+	SetExcelBorder(nSheetNo, L"N3:S3", 1);
+	Set_FormatCell(nSheetNo, L"General", 1, 12);
+	Set_FormatCell(nSheetNo, L"General", 2, 12);
 	return m_hr;
 }
 
 HRESULT CExcell::Open(LPCTSTR szFilename, bool bVisible)
 {
+	Quit();
 	if(m_pEApp==NULL) 
 	{
 		if(FAILED(m_hr=Initialize(bVisible)))
@@ -219,7 +230,7 @@ HRESULT CExcell::Quit()
 	return m_hr;
 }
 
-HRESULT CExcell::Set_Data(int sheet_num, LPCTSTR szText, int nRow, int nCol)
+HRESULT CExcell::Set_Data(int sheet_num, LPCTSTR szText, int nRow, int nCol, int status)
 {
 	static int number = 0;
 	number++;
@@ -281,7 +292,14 @@ HRESULT CExcell::Set_Data(int sheet_num, LPCTSTR szText, int nRow, int nCol)
 		temp.Format(_T("%d"), nRow);
 		if (temp.Compare(L"1") && temp.Compare(L"2"))
 		{
-			Range = (CString)"C" + temp + (CString)":" + (CString)"H" + temp;
+			if(BST_CHECKED == status)
+			{
+				Range = (CString)"N" + temp + (CString)":" + (CString)"S" + temp;
+			}
+			else
+			{
+				Range = (CString)"C" + temp + (CString)":" + (CString)"H" + temp;
+			}
 
 			IDispatch* pRange;
 			{

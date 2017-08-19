@@ -22,7 +22,7 @@ protected:
 	HRESULT Initialize(bool bVisible);
 	HRESULT OLEMethod(int nType, VARIANT *pvResult, IDispatch *pDisp,LPOLESTR ptName, int cArgs...);
 	HRESULT SetVisible(bool bVisible);
-	HRESULT Set_Data(int sheet_num, LPCTSTR szText, int nRow, int nCol);
+	HRESULT Set_Data(int sheet_num, LPCTSTR szText, int nRow, int nCol, int status);
 	HRESULT Set_SheetName(int nSheetNo, LPCTSTR szSheetName);
 	HRESULT Get_Data(int num_sheet, int nrow, int ncol, CString &sValue);
 	HRESULT Get_Datas(int sheet_num, int index, CString &sValue);
@@ -35,11 +35,13 @@ protected:
 	HRESULT Quit();
 	HRESULT ProtectExcelSheet(int nSheetNo, LPCTSTR szPassword);
 	HRESULT Create_Format(int nSheetNo);
+	HRESULT Create_OWE_Format(int nSheetNo);
 
 public:
 	HRESULT Create_File(bool bVisible);
 	CString Get_PathFile();
 	HRESULT Set_FormatCell(int sheet_num, LPCTSTR szText, int nRow, int nCol);
 	HRESULT Open(LPCTSTR szFilename, bool bVisible);
+	
 };
 

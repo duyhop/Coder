@@ -21,6 +21,7 @@ private:
 	CButton CBtn_View;
 	CButton CBtn_Status;
 	CComboBox CCombobox;
+
 	CAction Action;
 
 protected:
