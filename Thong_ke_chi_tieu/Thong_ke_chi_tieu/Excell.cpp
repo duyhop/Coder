@@ -1,12 +1,10 @@
 #include "stdafx.h"
 #include "Excell.h"
 
-
 CExcell::CExcell(void): m_hr(NULL), m_pEApp(NULL), m_pBooks(NULL), m_pActiveBook(NULL), m_Sheets(NULL)
 {
 
 }
-
 
 CExcell::~CExcell(void)
 {
@@ -133,6 +131,7 @@ HRESULT CExcell::Create_Format(int nSheetNo)
 	SetExcelBorder(nSheetNo, L"C3:H3", 1);
 	Set_FormatCell(nSheetNo, L"General", 1, 2);
 	Set_FormatCell(nSheetNo, L"General", 2, 2);
+
 	return m_hr;
 }
 HRESULT CExcell::Create_OWE_Format(int nSheetNo)
@@ -288,7 +287,7 @@ HRESULT CExcell::Set_Data(int sheet_num, LPCTSTR szText, int nRow, int nCol, int
 	{
 		CString temp = NULL;
 		CString Range = NULL;
-		
+
 		temp.Format(_T("%d"), nRow);
 		if (temp.Compare(L"1") && temp.Compare(L"2"))
 		{

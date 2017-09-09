@@ -26,6 +26,18 @@ void CAction::Push_action(CString Money, CString Note, CString Date)
 			Create_Format(imonth);
 		}
 	}
+
+	{
+		CString strCurrent_Money = NULL;
+
+		Get_Data(imonth, 1, 2, strCurrent_Money);
+		if(!strCurrent_Money.Compare(L"0"))
+		{
+			Get_Data(imonth -1, 1, 2, strCurrent_Money);
+			Set_Data(imonth, strCurrent_Money, 1, 2, BST_UNCHECKED);
+		}
+	}
+
 	if (current_indx == 0)
 	{
 		current_indx = Get_curr_index(imonth, 1);
