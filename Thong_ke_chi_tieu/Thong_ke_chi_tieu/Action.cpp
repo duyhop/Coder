@@ -86,7 +86,7 @@ void CAction::Push_action(CString Money, CString Note, CString Date)
 void CAction::Push_owe_action(CString Money, CString Note, CString Date)
 {
 	int imonth = 0;
-	static int current_indx = 0;
+	int current_indx = 0;
 	CString strDay = NULL;
 	
 	imonth = get_Month(Date);
