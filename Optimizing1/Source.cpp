@@ -14,7 +14,7 @@ public:
 		int c;
 		void show()
 			{
-				cout << "test" << endl;
+				cout << "test" << COnflic << endl;
 			}
 		class C{
 		public:
@@ -28,6 +28,5 @@ public:
 int main()
 {
 
-	cout << show ;
 	return 0;
 }
