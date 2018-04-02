@@ -8,7 +8,7 @@ using namespace std;
 class A {
 public:
 	int a;
-	cout << "test" << COnflic << endl;
+	cout << "test" << endl;
 	class B{
 	public:
 		int c;
@@ -19,7 +19,7 @@ public:
 		class C{
 		public:
 			int d;
-			cout << "test" << COnflic << endl;
+			cout << "test"  << endl;
 		};
 	};
 	void A::B::show() {}
