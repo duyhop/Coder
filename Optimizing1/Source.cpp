@@ -19,7 +19,7 @@ public:
 		class C{
 		public:
 			int d;
-			cout << "test" << COnflic << endl;
+			cout << "test"  << endl;
 		};
 	};
 	void A::B::show() {}
