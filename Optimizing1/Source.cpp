@@ -27,6 +27,6 @@ public:
 
 int main()
 {
-cout << "test" << COnflic << AMCJ << endl;
+cout << "test Test branch" << endl;
 	return 0;
 }
