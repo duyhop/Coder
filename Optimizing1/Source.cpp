@@ -28,6 +28,7 @@ public:
 int main()
 {
 
-	cout << show ;
+	cout << show << test;
+	cout << test << test;
 	return 0;
 }
