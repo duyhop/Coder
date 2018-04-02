@@ -28,5 +28,6 @@ public:
 int main()
 {
 
+	cout << show ;
 	return 0;
 }
